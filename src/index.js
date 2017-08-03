@@ -1,4 +1,4 @@
-import AWS from 'aws-sdk'
+import storage from '@google-cloud/storage'
 import BaseStore from 'ghost-storage-base'
 import { join } from 'path'
 import Promise, { promisify } from 'bluebird'
