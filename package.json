@@ -1,9 +1,5 @@
 {
-  "author": {
-    "name": "Colin Meinke",
-    "email": "hello@colinmeinke.com",
-    "url": "https://colinmeinke.com"
-  },
+  "author": "Darren Odden <hello@odden.io> (https://www.odden.io)",
   "babel": {
     "plugins": [
       "transform-object-rest-spread",
@@ -24,7 +20,7 @@
     ]
   },
   "bugs": {
-    "url": "https://github.com/colinmeinke/ghost-storage-adapter-s3/issues"
+    "url": "https://github.com/O-io/ghost-storage-adapter-gcloud/issues"
   },
   "config": {
     "commitizen": {
@@ -32,11 +28,11 @@
     }
   },
   "dependencies": {
-    "aws-sdk": "^2.6.3",
+    "@google-cloud/storage": "^1.2.1",
     "bluebird": "^3.4.6",
     "ghost-storage-base": "0.0.1"
   },
-  "description": "An AWS S3 storage adapter for Ghost 0.10+",
+  "description": "A Google Cloud storage adapter for Ghost 1.0+",
   "devDependencies": {
     "babel-cli": "^6.14.0",
     "babel-plugin-add-module-exports": "^0.2.1",
@@ -48,21 +44,19 @@
     "snazzy": "^5.0.0",
     "standard": "^8.3.0"
   },
-  "homepage": "https://github.com/colinmeinke/ghost-storage-adapter-s3#readme",
+  "homepage": "https://github.com/O-io/ghost-storage-adapter-gcloud#readme",
   "license": "ISC",
   "keywords": [
     "adapter",
-    "aws",
+    "gcloud",
     "ghost",
-    "s3",
+    "bucket",
+    "google-cloud",
     "storage"
   ],
-  "main": "index.js",
-  "name": "ghost-storage-adapter-s3",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/colinmeinke/ghost-storage-adapter-s3.git"
-  },
+  "main": "src/index.js",
+  "name": "ghost-storage-adapter-gcloud",
+  "repository": "https://github.com/O-io/ghost-storage-adapter-gcloud.git",
   "scripts": {
     "build": "babel ./src/index.js --out-file ./index.js",
     "commit": "git-cz",
