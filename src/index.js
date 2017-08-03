@@ -12,34 +12,34 @@ class Store extends BaseStore {
   constructor (config = {}) {
     super(config)
 
-    AWS.config.setPromisesDependency(Promise)
+    storage.config.setPromisesDependency(Promise)
 
     const {
-      accessKeyId,
-      assetHost,
+      projectId,
+      keyFilename,
       bucket,
-      pathPrefix,
-      region,
-      secretAccessKey
     } = config
 
-    this.accessKeyId = accessKeyId
+    this.projectId = projectId
     this.bucket = bucket
-    this.host = assetHost || `https://s3${region === 'us-east-1' ? '' : `-${region}`}.amazonaws.com/${bucket}`
+    // this.host = assetHost || `https://${this.bucket}.storage.googleapis.com/`
     this.pathPrefix = stripLeadingSlash(pathPrefix || '')
-    this.region = region
-    this.secretAccessKey = secretAccessKey
+    this.keyFilename = keyFilename
+    this.gcs = storage({
+      projectId: projectId,
+      keyFilname: keyFilename,
+      bucket: bucket
+    })
   }
 
   delete (fileName, targetDir) {
     const directory = targetDir || this.getTargetDir(this.pathPrefix)
 
     return new Promise((resolve, reject) => {
-      return this.s3()
-        .deleteObject({
-          Bucket: this.bucket,
-          Key: stripLeadingSlash(join(directory, fileName))
-        })
+      return this.gcs
+        .file.delete(
+          stripLeadingSlash(join(directory, fileName))
+        )
         .promise()
         .then(() => resolve(true))
         .catch(() => resolve(false))
@@ -47,66 +47,43 @@ class Store extends BaseStore {
   }
 
   exists (fileName) {
+    const directory = targetDir || this.getTargetDir(this.pathPrefix)
+    
     return new Promise((resolve, reject) => {
-      return this.s3()
-        .getObject({
-          Bucket: this.bucket,
-          Key: stripLeadingSlash(fileName)
-        })
+      return this.gcs
+        .file.exists(
+          stripLeadingSlash(join(directory, fileName))
+        )
         .promise()
         .then(() => resolve(true))
         .catch(() => resolve(false))
     })
   }
 
-  s3 () {
-    return new AWS.S3({
-      accessKeyId: this.accessKeyId,
-      bucket: this.bucket,
-      region: this.region,
-      secretAccessKey: this.secretAccessKey
-    })
-  }
 
   save (image, targetDir) {
     const directory = targetDir || this.getTargetDir(this.pathPrefix)
 
     return new Promise((resolve, reject) => {
-      Promise.all([
-        this.getUniqueFileName(image, directory),
-        readFileAsync(image.path)
-      ]).then(([ fileName, file ]) => (
-        this.s3()
-          .putObject({
-            ACL: 'public-read',
-            Body: file,
-            Bucket: this.bucket,
-            CacheControl: `max-age=${30 * 24 * 60 * 60}`,
-            ContentType: image.type,
-            Key: stripLeadingSlash(fileName)
-          })
-          .promise()
-          .then(() => resolve(`${this.host}/${fileName}`))
-      )).catch(error => reject(error))
+      return this.gcs
+        .upload(
+          stripLeadingSlash(join(directory, fileName))
+        )
+        .promise()
+        .then(() => resolve(true))
+        .catch(() => resolve(false))
     })
   }
 
   serve () {
     return (req, res, next) => {
-      this.s3()
-        .getObject({
-          Bucket: this.bucket,
-          Key: stripLeadingSlash(req.path)
-        }).on('httpHeaders', function (statusCode, headers, response) {
-          res.set(headers)
-        })
-            .createReadStream()
-            .on('error', function (err) {
-              res.status(404)
-              console.log(err + '\nkey: ' + stripLeadingSlash(req.path))
-              next()
-            })
-            .pipe(res)
+      return this.gcs
+        .file.createReadStream(
+          stripLeadingSlash(join(directory, fileName))
+        )
+        .promise()
+        .then(() => resolve(true))
+        .catch(() => resolve(false))
     }
   }
 
