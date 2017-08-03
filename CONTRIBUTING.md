@@ -2,7 +2,7 @@
 
 Thank you for contributing! :star2:
 
-By contributing to Ghost storage adapter S3, you agree to abide
+By contributing to Ghost storage adapter gcloud, you agree to abide
 by the [code of conduct](./CODE_OF_CONDUCT.md).
 
 ## Issues
@@ -15,9 +15,9 @@ for discussion before you spend the time to submit a pull request.
 
 ### Project setup
 
-1. [Fork this repository](https://github.com/colinmeinke/ghost-storage-adapter-s3/fork)
+1. [Fork this repository](https://github.com/O-io/ghost-storage-adapter-gcloud/fork)
 2. Clone your fork:
-   `git clone git@github.com:your-username/ghost-storage-adapter-s3.git && cd ghost-storage-adapter-s3`
+   `git clone git@github.com:your-username/ghost-storage-adapter-gcloud.git && cd ghost-storage-adapter-gcloud`
 3. Install the dependencies: `npm install`
 
 You should now be able to use the npm scripts to carry
@@ -37,7 +37,7 @@ create a new branch for each pull request.
 #### Set the upstream
 
 ```
-git remote add upstream git@github.com:colinmeinke/ghost-storage-adapter-s3.git
+git remote add upstream git@github.com:O-io/ghost-storage-adapter-gcloud.git
 ```
 
 #### Create a new branch

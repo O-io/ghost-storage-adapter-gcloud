@@ -1,30 +1,27 @@
-# Ghost storage adapter S3
+# Ghost storage adapter GCloud
 
 An AWS S3 storage adapter for Ghost 1.x
 
 For Ghost 0.10.x and 0.11.x support check out
-[Ghost storage adapter s3 v1.3.0](https://github.com/colinmeinke/ghost-storage-adapter-s3/releases/tag/v1.3.0).
+[Ghost Google Cloud Storage adapter](https://github.com/thombuchi/ghost-google-cloud-storage).
 
 ## Installation
 
 ```
-npm install ghost-storage-adapter-s3
+npm install ghost-storage-adapter-gcloud
 mkdir -p ./content/adapters/storage
-cp -r ./node_modules/ghost-storage-adapter-s3 ./content/adapters/storage/s3
+cp -r ./node_modules/ghost-storage-adapter-s3 ./content/adapters/storage/gcloud
 ```
 
 ## Configuration
 
 ```
 storage: {
-  active: 's3',
+  active: 'gcloud',
   s3: {
-    accessKeyId: 'YOUR_ACCESS_KEY_ID',
-    assetHost: 'YOUR_OPTIONAL_CDN_URL',
-    bucket: 'YOUR_BUCKET_NAME',
-    pathPrefix: 'YOUR_OPTIONAL_BUCKET_SUBDIRECTORY',
-    region: 'YOUR_REGION_SLUG',
-    secretAccessKey: 'YOUR_SECRET_ACCESS_KEY'
+    projectId: 'YOUR_ACCESS_KEY_ID',
+    key: 'PROJECT_KEY_PATH_FILENAME.JSON',
+    bucket: 'YOUR_BUCKET_NAME'
   }
 }
 ```
