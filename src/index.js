@@ -12,7 +12,7 @@ class Store extends BaseStore {
   constructor (config = {}) {
     super(config)
 
-    storage.config.setPromisesDependency(Promise)
+    // storage.config.setPromisesDependency(Promise)
 
     const {
       projectId,
@@ -23,12 +23,11 @@ class Store extends BaseStore {
     this.projectId = projectId
     this.bucket = bucket
     // this.host = assetHost || `https://${this.bucket}.storage.googleapis.com/`
-    this.pathPrefix = stripLeadingSlash(pathPrefix || '')
+    // this.pathPrefix = stripLeadingSlash(pathPrefix || '')
     this.keyFilename = keyFilename
     this.gcs = storage({
       projectId: projectId,
-      keyFilname: keyFilename,
-      bucket: bucket
+      keyFilname: keyFilename
     })
   }
 
@@ -36,8 +35,7 @@ class Store extends BaseStore {
     const directory = targetDir || this.getTargetDir(this.pathPrefix)
 
     return new Promise((resolve, reject) => {
-      return this.gcs
-        .file.delete(
+      return this.gcBucket.file.delete(
           stripLeadingSlash(join(directory, fileName))
         )
         .promise()
@@ -47,12 +45,9 @@ class Store extends BaseStore {
   }
 
   exists (fileName) {
-    const directory = targetDir || this.getTargetDir(this.pathPrefix)
-    
     return new Promise((resolve, reject) => {
-      return this.gcs
-        .file.exists(
-          stripLeadingSlash(join(directory, fileName))
+      return this.gcBucket.file.exists(
+          stripLeadingSlash(fileName)
         )
         .promise()
         .then(() => resolve(true))
@@ -60,30 +55,41 @@ class Store extends BaseStore {
     })
   }
 
+  gcBucket () {
+    return new storage.Bucket({
+      projectId: this.projectId,
+      bucket: this.bucket,
+      keyFilename: this.keyFilename
+    })
+  }
 
   save (image, targetDir) {
     const directory = targetDir || this.getTargetDir(this.pathPrefix)
 
     return new Promise((resolve, reject) => {
-      return this.gcs
-        .upload(
-          stripLeadingSlash(join(directory, fileName))
-        )
-        .promise()
-        .then(() => resolve(true))
-        .catch(() => resolve(false))
+      Promise.all([
+        this.getUniqueFileName(image, directory),
+        readFileAsync(image.path)
+      ]).then(([ fileName, file ]) => (
+        this.gcBucket.upload( image, function(err, file) {})
+      ))
     })
   }
 
   serve () {
     return (req, res, next) => {
-      return this.gcs
-        .file.createReadStream(
-          stripLeadingSlash(join(directory, fileName))
-        )
-        .promise()
-        .then(() => resolve(true))
-        .catch(() => resolve(false))
+      return this.gcBucket.file.createReadStream(
+          stripLeadingSlash(req.path)
+        ).on('httpHeaders', function(statusCode, headers, response) {
+          res.set(headers)
+        })
+        .createReadStream()
+        .on('error', function(err) {
+          res.status(404)
+          console.log(err + '\nkey: ' + stripLeadingSlash(req.path))
+          next()
+        })
+        .pipe(res)
     }
   }
 

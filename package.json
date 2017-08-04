@@ -54,7 +54,7 @@
     "google-cloud",
     "storage"
   ],
-  "main": "src/index.js",
+  "main": "index.js",
   "name": "ghost-storage-adapter-gcloud",
   "repository": "https://github.com/O-io/ghost-storage-adapter-gcloud.git",
   "scripts": {
