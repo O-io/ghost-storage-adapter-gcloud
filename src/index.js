@@ -18,6 +18,7 @@ class Store extends BaseStore {
     })
 
     this.config = config
+    this.storagePath = this.config.storagePath || 'uploads';
     this.config.hostname = this.config.hostname || 'https://' + this.config.bucket + '.storage.googleapis.com/'
     this.bucket = this.gcs.bucket(this.config.bucket)
   }
@@ -47,7 +48,7 @@ class Store extends BaseStore {
         self = this;
 
     // NOTE: the base implementation of `getTargetDir` returns the format this.storagePath/YYYY/MM
-    targetDir = targetDir || this.getTargetDir(this.storagePath);
+    targetDir = targetDir || this.storagePath;
 
     return this.getUniqueFileName(image, targetDir).then(function (filename) {
           targetFilename = filename;

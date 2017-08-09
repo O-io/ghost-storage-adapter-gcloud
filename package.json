@@ -66,5 +66,5 @@
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "test": "exit 0"
   },
-  "version": "0.0.0-semantically-released"
+  "version": "0.0.3"
 }
