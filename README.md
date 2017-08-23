@@ -10,7 +10,7 @@ For Ghost 0.10.x and 0.11.x support check out
 ```
 npm install ghost-storage-adapter-gcloud
 mkdir -p ./content/adapters/storage
-cp -r ./node_modules/ghost-storage-adapter-gcloud ./content/adapters/storage/gcloud
+cp -r ./node_modules/ghost-storage-adapter-gcloud/index.js ./content/adapters/storage/gcloud/.
 ```
 
 ## Configuration
