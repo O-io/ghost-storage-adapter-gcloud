@@ -27,6 +27,12 @@
       "path": "node_modules/cz-conventional-changelog"
     }
   },
+  "standard": {
+    "globals": [
+      "describe",
+      "it"
+    ]
+  },
   "dependencies": {
     "@google-cloud/storage": "^1.2.1",
     "bluebird": "^3.4.6",
@@ -38,8 +44,11 @@
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-object-rest-spread": "^6.8.0",
     "babel-preset-env": "^1.6.0",
+    "babel-register": "^6.26.0",
+    "code": "^5.2.3",
     "commitizen": "^2.8.6",
     "cz-conventional-changelog": "^1.2.0",
+    "mocha": "^5.2.0",
     "semantic-release": "^4.3.5",
     "snazzy": "^5.0.0",
     "standard": "^8.3.0"
@@ -64,7 +73,7 @@
     "lint": "standard --verbose | snazzy",
     "prepublish": "npm run build",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "test": "exit 0"
+    "test": "mocha --compilers js:babel-register './!(node_modules)/**/**.+(spec).js'"
   },
   "version": "0.0.4"
 }
