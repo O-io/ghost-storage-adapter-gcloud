@@ -19,8 +19,8 @@ cp -r ./node_modules/ghost-storage-adapter-gcloud/index.js ./content/adapters/st
 storage: {
   active: 'gcloud',
   gcloud: {
-    projectId: 'YOUR_ACCESS_KEY_ID',
-    key: 'PROJECT_KEY_PATH_FILENAME.JSON',
+    projectID: 'YOUR_ACCESS_KEY_ID',
+    keyFilename: 'PROJECT_KEY_PATH_FILENAME.JSON',
     bucket: 'YOUR_BUCKET_NAME'
   }
 }
